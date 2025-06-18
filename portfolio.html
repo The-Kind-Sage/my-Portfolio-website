@@ -89,11 +89,19 @@
       border-radius: 1rem;
       padding: 2rem;
       box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease;
+      transform: translateY(50px);
+      opacity: 0;
+      transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    }
+
+    .project-card.in-view {
+      transform: translateY(0);
+      opacity: 1;
     }
 
     .project-card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-10px) scale(1.02);
+      transition: transform 0.3s ease;
     }
 
     .contact-form {
@@ -209,7 +217,24 @@
       alert("Thank you! Your message has been sent.");
       event.target.reset();
     }
+
+    // Animate project cards on scroll into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.project-card').forEach(card => {
+      observer.observe(card);
+    });
   </script>
 </body>
 
 </html>
+
